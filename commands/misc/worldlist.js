@@ -8,6 +8,10 @@
 /**
  * @type {import('../../typings').LegacyCommand}
  */
+ const { dirname } = require('path');
+ const appDir = dirname(require.main.filename);
+ var Utality = require(appDir+'/utality/utality');
+ var con = require(appDir+'/utality/connection');
 module.exports = {
 	name: 'worldlist',
 	// Refer to typings.d.ts for available properties.
@@ -15,16 +19,7 @@ module.exports = {
 	execute (message, args) {
 		console.log(message)
 		console.log(args)
-		var mysql = require('mysql')
-
-		var con = mysql.createConnection({
-			host: '127.0.0.1',
-			port: '3306',
-			user: 'root',
-			password: 'lycanthrope',
-			database: 'destinyofmagicdiscordbot'
-		})
-
+		
 		con.connect(function (err) {
 			if (err) throw err
 			console.log('Connected!')
