@@ -9,7 +9,7 @@
  * @type {import('../../typings').LegacyCommand}
  */
  module.exports = {
-	name: 'addnation',
+	name: 'landlist',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -28,22 +28,17 @@
 		con.connect(function (err) {
 			if (err) throw err
 			console.log('Connected!')
-			var sql = 'INSERT INTO nation (name) VALUES (?)'
-			con.query(sql, [args[0]], function (err, result) {
-				if (err) throw err
-				console.log('1 record inserted')
-			})
-			var sql_select = 'SELECT * FROM nation'
-			var nation_array = [];
+			var sql_select = 'SELECT * FROM land'
+			var land_array = [];
 			con.query(sql_select, function (err, result) {
 				if (err) throw err
+				console.log(result);
 				result.map(RowDataPacket => {
-					nation_array.push(RowDataPacket.name);
+					land_array.push(RowDataPacket.land_name);
 				})
-				console.log(nation_array.toString());
-				message.channel.send({ content: 'Adding nation Successful!' })
-				message.channel.send({ content: 'Current nation are' })
-				message.channel.send({ content: nation_array.toString() })
+				console.log(land_array.toString());
+				message.channel.send({ content: 'Current lands are' })
+				message.channel.send({ content: land_array.toString() })
 			})
 		})
 	}

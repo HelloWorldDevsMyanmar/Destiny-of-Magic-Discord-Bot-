@@ -33,7 +33,7 @@ module.exports = {
 			con.query(sql_select, function (err, result) {
 				if (err) throw err
 				result.map(RowDataPacket => {
-					world_array.push(RowDataPacket.name);
+					world_array.push(RowDataPacket.world_name);
 				})
 				console.log(world_array.toString());
 				message.channel.send({ content: 'Current worlds are' })

@@ -28,7 +28,7 @@ module.exports = {
 		con.connect(function (err) {
 			if (err) throw err
 			console.log('Connected!')
-			var sql = 'INSERT INTO world (name) VALUES (?)'
+			var sql = 'INSERT INTO world (world_name) VALUES (?)'
 			con.query(sql, [args[0]], function (err, result) {
 				if (err) throw err
 				console.log('1 record inserted')
@@ -37,8 +37,9 @@ module.exports = {
 			var world_array = [];
 			con.query(sql_select, function (err, result) {
 				if (err) throw err
+				console.log(result);
 				result.map(RowDataPacket => {
-					world_array.push(RowDataPacket.name);
+					world_array.push(RowDataPacket.world_name);
 				})
 				console.log(world_array.toString());
 				message.channel.send({ content: 'Adding world Successful!' })
