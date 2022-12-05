@@ -13,7 +13,7 @@ const appDir = dirname(require.main.filename)
 var Utality = require(appDir + '/utality/utality')
 
 module.exports = {
-	name: 'addworld',
+	name: 'addresource',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -23,28 +23,49 @@ module.exports = {
 		Utality.Log('Connected')
 		con.getConnection(function (err, conn) {
 			function queryData () {
-				var sql_select = 'SELECT * FROM world'
-				//World SQL
+				var sql_select = 'SELECT * FROM resources'
+
+				//Resource SQL
 				con.query(sql_select, function (err, result) {
 					if (err) throw err
-					result.map(WorldName => {
-						var json = { 'World ': WorldName.world_name }
+					result.map(ResourceName => {
+						var json = { 'Resource ': ResourceName.resource_name }
 						Utality.Embed(
 							message,
 							json,
-							'World List',
-							'List How Many World In This Game.'
+							'Resource List',
+							'List How Many Resource In This Game.'
 						)
 					})
 				})
 			}
-			function AddData (data) {
-				var sql = 'INSERT INTO world (world_name) VALUES (?)'
-				con.query(sql, [data], function (err, result) {
+			function AddData (world_name, data, resource_quantity, fixed_amount) {
+				var sql_select_world = 'SELECT * FROM world WHERE world_name LIKE ?'
+				con.query(sql_select_world, ['%' + world_name + '%'], function (
+					err,
+					result
+				) {
 					if (err) throw err
 					Utality.Log('1 record inserted')
-					var json = { 'World ': data }
-					Utality.Embed(message, json, 'A New World Added', ' ')
+					Utality.Log(result[0].id)
+					var world_id = result[0].id
+
+					var sql =
+						'INSERT INTO resources (world_id, resource_name, resource_quantity, fixed_amount) VALUES (?, ?, ?, ?)'
+					con.query(
+						sql,
+						[world_id, data, resource_quantity, fixed_amount],
+						function (err, result) {
+							if (err) throw err
+							Utality.Log('1 record inserted')
+							var json = {
+								'Resource': data,
+								'Quantity': resource_quantity,
+								'Fixed Amount': fixed_amount
+							}
+							Utality.Embed(message, json, 'A New Resource Added', ' ')
+						}
+					)
 				})
 			}
 
@@ -54,7 +75,7 @@ module.exports = {
 				conn.release()
 			}
 
-			AddData(args[0])
+			AddData(args[0], args[1], args[2], args[3])
 			queryData()
 			releaseQuery()
 			Utality.Log(`All Connections ${con._allConnections.length}`)
