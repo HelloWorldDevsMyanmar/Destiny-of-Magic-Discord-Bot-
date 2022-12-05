@@ -2,6 +2,8 @@ var mysql = require('mysql');
 const { dirname } = require('path');
 const appDir = dirname(require.main.filename);
 var Utality = require(appDir+'/utality/utality');
+const { mysql_user, mysql_pass, mysql_server, mysql_port,mysql_db} = require(appDir+"/config.json");
+
 // var con = mysql.createConnection({
 //     host: '127.0.0.1',
 //     port: '8889',
@@ -12,11 +14,11 @@ var Utality = require(appDir+'/utality/utality');
 
 config = {
     connectionLimit: 10,
-    host: '127.0.0.1',
-    port: '3306',
-    user: 'root',
-    password: 'lycanthrope',
-    database: 'destinyofmagicdiscordbot',
+    host: mysql_server,
+    port: mysql_port,
+    user: mysql_user,
+    password: mysql_pass,
+    database: mysql_db,
     waitForConnections: true,
     multipleStatements: true
   };
