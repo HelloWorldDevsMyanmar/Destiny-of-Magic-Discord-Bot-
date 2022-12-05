@@ -39,12 +39,12 @@
                  })
              }
              function AddData (data) {
-                 var sql = 'INSERT INTO terrain (world_name) VALUES (?)'
+                 var sql = 'INSERT INTO terrain (terrain_name) VALUES (?)'
                  con.query(sql, [data], function (err, result) {
                      if (err) throw err
                      Utality.Log('1 record inserted')
-                     var json = { 'World ': data }
-                     Utality.Embed(message, json, 'A New World Added', ' ')
+                     var json = { 'Terrain ': data }
+                     Utality.Embed(message, json, 'A New Terrain Added', ' ')
                  })
              }
  
