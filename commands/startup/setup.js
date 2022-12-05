@@ -52,20 +52,49 @@ const util = require('util');
 											.then(land => {
 												// land.setParent(categoryid);
 												const landid_category=land.id;
+												const landid=LandName.id;
 												Utality.Log(message.guild);
 												Utality.Log("Channel ID: "+landid_category);
-												Utality.Log("Land ID: "+LandName.id);
+												Utality.Log("Land ID: "+landid);
+												var sql_terrain="Select * From terrain";
+												con.query(sql_terrain, function (err, Terrain) {
+													if (err) throw err 
+
+													
+													console.log(Terrain);
+													Terrain.forEach((data) => {
+													var terrain_id=data.id;
+													var terrain_name=data.terrain_name;
+														message.guild.channels.create({ name: terrain_name+"", type: ChannelType.GuildText, reason: 'Terrain Channel' })
+													.then(category => {
+														category.setParent(landid_category);
+
+																//Adding Important Server Features
+														var sql = 'INSERT INTO channels (server_id,channel_name,channel_id,category_id,land_id) VALUES (?,?,?,?,?)'
+														
+														con.query(sql, [message.guild.id,message.guild.name,category.id,landid_category,LandName.id], function (err, result) {
+															if (err) throw err 
+															Utality.Log("Terrain Created");
+															var json = {"Terrain": terrain_name};
+															Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
+														})
+														var land_terrain_sql = 'INSERT INTO terrain_in_land (terrain_id,land_id) VALUES (?,?)'
+														
+														con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
+															if (err) throw err 
+															Utality.Log("Land And Terrain Linked");
+															var json = {"Terrain": terrain_name};
+															Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
+														})
+													});
+													})
+													
+													
+												})
 
 
-												// //Adding Important Server Features
-												// var sql = 'INSERT INTO channels (server_id,channel_name,channel_id,category_id,land_id) VALUES (?,?,?,?,?)'
+
 												
-												// con.query(sql, [message.guild.id,message.guild.name,landid,categoryid,LandName.id], function (err, result) {
-												// 	if (err) throw err 
-												// 	Utality.Log("Channel Created");
-												// 	var json = {"Channel": LandName.land_name};
-												// 	Utality.Embed(message,json,"Land Created","A New Land in World Has Been Created");
-												// })
 											
 											}).catch(console.error).then(Utality.Log("Finally"));
 										})
