@@ -13,10 +13,10 @@ var Utality = require(appDir+'/utality/utality');
 config = {
     connectionLimit: 10,
     host: '127.0.0.1',
-    port: '8889',
+    port: '3396',
     user: 'root',
     password: 'root',
-    database: 'dangame',
+    database: 'destiny_of_magic',
     waitForConnections: true,
     multipleStatements: true
   };
