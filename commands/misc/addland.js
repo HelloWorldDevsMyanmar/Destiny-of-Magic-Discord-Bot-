@@ -39,13 +39,28 @@
 							
 				});
 			}
-				function AddData(data,world_id) {
+				function AddData(data,world) {
+
+					var sql_select_world = 'SELECT * FROM world WHERE world_name LIKE ?'
+				con.query(sql_select_world, ['%' + world + '%'], function (
+					err,
+					result
+				) {
+					if (err) throw err
+					Utality.Log('1 record inserted')
+					Utality.Log(result[0].id)
+					var world_id = result[0].id
 					var sql = 'INSERT INTO land (land_name, world_id) VALUES (?,?)'
 					con.query(sql, [data,world_id], function (err, result) {
 					if (err) throw err
 					Utality.Log('1 record inserted')
 					var json = {"Land ": data};
 					Utality.Embed(message,json,"A New Land Added"," ");
+					
+				})
+
+
+					
 				})
 					
 			}
