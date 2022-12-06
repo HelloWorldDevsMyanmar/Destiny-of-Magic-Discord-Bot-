@@ -11,7 +11,8 @@
  const { dirname } = require('path');
  const appDir = dirname(require.main.filename);
  var Utality = require(appDir+'/utality/utality');
- 
+ var Query = require(appDir+'/utality/query');
+
 module.exports = {
 	name: 'worldlist',
 	// Refer to typings.d.ts for available properties.
@@ -26,7 +27,7 @@ module.exports = {
 			con.getConnection(function(err, conn) {
 				
 				function queryData() {
-					var sql_select = 'SELECT * FROM world'
+					var sql_select = Query.all_world;
 					//World SQL
 					con.query(sql_select, function (err, result) {
 					

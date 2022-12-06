@@ -70,9 +70,10 @@ const util = require('util');
 														category.setParent(landid_category);
 
 																//Adding Important Server Features
-														var sql = 'INSERT INTO channels (server_id,channel_name,channel_id,category_id,land_id) VALUES (?,?,?,?,?)'
+																//category_id = LandID
+														var sql = 'INSERT INTO channels (server_id,channel_name,channel_id,terrain_id,land_id,world_id) VALUES (?,?,?,?,?,?)'
 														
-														con.query(sql, [message.guild.id,message.guild.name,category.id,landid_category,LandName.id], function (err, result) {
+														con.query(sql, [message.guild.id,message.guild.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
 															if (err) throw err 
 															Utality.Log("Terrain Created");
 															var json = {"Terrain": terrain_name};
