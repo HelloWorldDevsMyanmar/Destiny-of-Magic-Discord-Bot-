@@ -11,6 +11,8 @@
  const { dirname } = require('path');
  const appDir = dirname(require.main.filename);
  var Utality = require(appDir+'/utality/utality');
+ var Query = require(appDir+'/utality/query');
+ 
  
  module.exports = {
 	name: 'addland',
@@ -27,7 +29,7 @@
 		con.getConnection(function(err, conn) {
 				
 				function queryData() {
-					var sql_select = 'SELECT * FROM land'
+					var sql_select = Query.all_land;
 					//World SQL
 					con.query(sql_select, function (err, result) {
 					
@@ -39,13 +41,28 @@
 							
 				});
 			}
-				function AddData(data,world_id) {
-					var sql = 'INSERT INTO land (land_name, world_id) VALUES (?,?)'
+				function AddData(data,world) {
+
+					var sql_select_world =  Query.select_world_name;
+				con.query(sql_select_world, ['%' + world + '%'], function (
+					err,
+					result
+				) {
+					if (err) throw err
+					Utality.Log('1 record inserted')
+					Utality.Log(result[0].id)
+					var world_id = result[0].id
+					var sql =  Query.insert_land;
 					con.query(sql, [data,world_id], function (err, result) {
 					if (err) throw err
 					Utality.Log('1 record inserted')
 					var json = {"Land ": data};
 					Utality.Embed(message,json,"A New Land Added"," ");
+					
+				})
+
+
+					
 				})
 					
 			}

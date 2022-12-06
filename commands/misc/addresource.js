@@ -11,7 +11,8 @@
 const { dirname } = require('path')
 const appDir = dirname(require.main.filename)
 var Utality = require(appDir + '/utality/utality')
-
+var Query = require(appDir+'/utality/query');
+ 
 module.exports = {
 	name: 'addresource',
 	// Refer to typings.d.ts for available properties.
@@ -23,7 +24,7 @@ module.exports = {
 		Utality.Log('Connected')
 		con.getConnection(function (err, conn) {
 			function queryData () {
-				var sql_select = 'SELECT * FROM resources'
+				var sql_select = Query.all_resource;
 
 				//Resource SQL
 				con.query(sql_select, function (err, result) {
@@ -40,7 +41,7 @@ module.exports = {
 				})
 			}
 			function AddData (world_name, data, resource_quantity, fixed_amount) {
-				var sql_select_world = 'SELECT * FROM world WHERE world_name LIKE ?'
+				var sql_select_world = Query.select_world_name;
 				con.query(sql_select_world, ['%' + world_name + '%'], function (
 					err,
 					result
@@ -50,8 +51,8 @@ module.exports = {
 					Utality.Log(result[0].id)
 					var world_id = result[0].id
 
-					var sql =
-						'INSERT INTO resources (world_id, resource_name, resource_quantity, fixed_amount) VALUES (?, ?, ?, ?)'
+					var sql =Query.insert_resource;
+						
 					con.query(
 						sql,
 						[world_id, data, resource_quantity, fixed_amount],
