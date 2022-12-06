@@ -13,8 +13,8 @@
  var Utality = require(appDir+'/utality/utality');
  var Query = require(appDir+'/utality/query');
 
- module.exports = {
-	name: 'landlist',
+module.exports = {
+	name: 'resourcelist',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -27,14 +27,14 @@
 			con.getConnection(function(err, conn) {
 				
 				function queryData() {
-					var sql_select = Query.all_land;
+					var sql_select = Query.all_resource;
 					//World SQL
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
-						result.map(Land =>{
-							var json = {"Current Land are : ": Land.land_name};
-							Utality.Embed(message,json,"Land List","Current Lands Are.");
+						result.map(ResourceName =>{
+							var json = {"Resources ": ResourceName.resource_name};
+							Utality.Embed(message,json,"Resource List","List How Many Resources Are In This Game.");
 						});
 							
 				});
