@@ -32,6 +32,7 @@
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(Land =>{
 							var json = {"Current Land are : ": Land.land_name};
 							Utality.Embed(message,json,"Land List","Current Lands Are.");

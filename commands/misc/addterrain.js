@@ -28,6 +28,7 @@
                  //World SQL
                  con.query(sql_select, function (err, result) {
                      if (err) throw err
+                     if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
                      result.map(TerrainName => {
                          var json = { 'Terrain ': TerrainName.terrain_name }
                          Utality.Embed(
@@ -43,6 +44,7 @@
                  var sql = Query.insert_terrain;
                  con.query(sql, [data], function (err, result) {
                      if (err) throw err
+                     if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
                      Utality.Log('1 record inserted')
                      var json = { 'Terrain ': data }
                      Utality.Embed(message, json, 'A New Terrain Added', ' ')

@@ -28,6 +28,7 @@ module.exports = {
 				//World SQL
 				con.query(sql_select, function (err, result) {
 					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 					result.map(WorldName => {
 						var json = { 'World ': WorldName.world_name }
 						Utality.Embed(
@@ -43,6 +44,7 @@ module.exports = {
 				var sql = Query.insert_world;
 				con.query(sql, [data], function (err, result) {
 					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 					Utality.Log('1 record inserted')
 					var json = { 'World ': data }
 					Utality.Embed(message, json, 'A New World Added', ' ')

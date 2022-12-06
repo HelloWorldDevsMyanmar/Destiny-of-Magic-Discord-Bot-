@@ -16,11 +16,15 @@ module.exports = {
       
       exampleEmbed.setTimestamp();
       exampleEmbed.setFooter({ text: 'Created By Hello World Dev', iconURL: 'https://mmanime.org/frontend/img/mark.png' });
-     
-      for (var key in data_array) {
-        exampleEmbed.addFields({ name: key+"", value: data_array[key]+"", inline: true });
-       
+      if(data_array.length>0){
+        for (var key in data_array) {
+          exampleEmbed.addFields({ name: key+"", value: data_array[key]+"", inline: true });
+         
+        }
+      }else{
+        exampleEmbed.addFields({ name: "Data", value: "0", inline: true });
       }
+    
       client.channel.send({ embeds: [exampleEmbed] });
        
     },

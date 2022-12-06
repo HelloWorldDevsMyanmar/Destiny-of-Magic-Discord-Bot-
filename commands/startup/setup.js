@@ -34,6 +34,7 @@ var Query = require(appDir+'/utality/query');
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(RowDataPacket => {
 							var json = {"Category": RowDataPacket.world_name};
 							Utality.Embed(message,json,"World Created","A New World Has Been Created");
@@ -46,6 +47,7 @@ var Query = require(appDir+'/utality/query');
 									
 									con.query(sql_land,[RowDataPacket.id], function (error, lands) {
 										if (err) throw err 
+										if (!lands.length) {Utality.Embed(message,result,"No Data","No Data");}
 										lands.map(LandName =>{
 											
 											Utality.Log("Category Created");
@@ -61,7 +63,7 @@ var Query = require(appDir+'/utality/query');
 												var sql_terrain=Query.all_terrain;
 												con.query(sql_terrain, function (err, Terrain) {
 													if (err) throw err 
-
+													if (!Terrain.length) {Utality.Embed(message,result,"No Data","No Data");}
 													
 													Utality.Log(Terrain);
 													Terrain.forEach((data) => {
@@ -77,6 +79,7 @@ var Query = require(appDir+'/utality/query');
 														
 														con.query(sql, [message.guild.id,category.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
 															if (err) throw err 
+															if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 															Utality.Log("Terrain Created");
 															var json = {"Terrain": terrain_name};
 															Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
@@ -85,6 +88,7 @@ var Query = require(appDir+'/utality/query');
 														
 														con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
 															if (err) throw err 
+															if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 															Utality.Log("Land And Terrain Linked");
 															var json = {"Terrain": terrain_name};
 															Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
