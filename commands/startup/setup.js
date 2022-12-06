@@ -17,6 +17,8 @@ const { dirname } = require('path');
 const appDir = dirname(require.main.filename);
 var Utality = require(appDir+'/utality/utality');
 const util = require('util');
+var Query = require(appDir+'/utality/query');
+
  module.exports = {
 	name: 'setup',
 	execute (message, args) {
@@ -40,9 +42,9 @@ const util = require('util');
 							.then(category => {
 									//Land SQL
 									// const categoryid=category.id;
-									var sql_land = 'SELECT * FROM land where world_id= '+	RowDataPacket.id;
+									var sql_land = Query.select_land_world;
 									
-									con.query(sql_land, function (error, lands) {
+									con.query(sql_land,[RowDataPacket.id], function (error, lands) {
 										if (err) throw err 
 										lands.map(LandName =>{
 											
@@ -56,12 +58,12 @@ const util = require('util');
 												Utality.Log(message.guild);
 												Utality.Log("Channel ID: "+landid_category);
 												Utality.Log("Land ID: "+landid);
-												var sql_terrain="Select * From terrain";
+												var sql_terrain=Query.all_terrain;
 												con.query(sql_terrain, function (err, Terrain) {
 													if (err) throw err 
 
 													
-													console.log(Terrain);
+													Utality.Log(Terrain);
 													Terrain.forEach((data) => {
 													var terrain_id=data.id;
 													var terrain_name=data.terrain_name;
@@ -71,15 +73,15 @@ const util = require('util');
 
 																//Adding Important Server Features
 																//category_id = LandID
-														var sql = 'INSERT INTO channels (server_id,channel_name,channel_id,terrain_id,land_id,world_id) VALUES (?,?,?,?,?,?)'
+														var sql = Query.insert_channel;
 														
-														con.query(sql, [message.guild.id,message.guild.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
+														con.query(sql, [message.guild.id,category.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
 															if (err) throw err 
 															Utality.Log("Terrain Created");
 															var json = {"Terrain": terrain_name};
 															Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
 														})
-														var land_terrain_sql = 'INSERT INTO terrain_in_land (terrain_id,land_id) VALUES (?,?)'
+														var land_terrain_sql = Query.insert_terrain_land;
 														
 														con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
 															if (err) throw err 

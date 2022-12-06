@@ -1,5 +1,5 @@
 var mysql = require('mysql')
-const { discord,EmbedBuilder } = require('discord.js');
+const { discord,EmbedBuilder,ChannelType } = require('discord.js');
 module.exports = {
     Log: function (output) {
         console.log(output);
@@ -23,5 +23,33 @@ module.exports = {
       }
       client.channel.send({ embeds: [exampleEmbed] });
        
-    }
+    },
+    Public_Thread: function(message,title,autoArchiveDuration,reason){
+
+      message.startThread({
+        name: title,
+        autoArchiveDuration: autoArchiveDuration,
+        type: 'GUILD_PUBLIC_THREAD',
+        reason: reason
+    }).then(function(result) {
+       var threadid=result.id;
+        //Since This Is Async , Getting ThreadID is Difficult. Planning to Make Thread DB after Discusing Enemy Encounters
+     
+     });
+
+    },
+    Private_Thread: function(message,title,autoArchiveDuration,reason){
+
+      message.startThread({
+        name: title,
+        autoArchiveDuration: autoArchiveDuration,
+        type: ChannelType.PrivateThread,
+        reason: reason
+    }).then(function(result) {
+      var threadid=result.id;
+       //Since This Is Async , Getting ThreadID is Difficult. Planning to Make Thread DB after Discusing Enemy Encounters
+     });
+
+    },
+    
   };
