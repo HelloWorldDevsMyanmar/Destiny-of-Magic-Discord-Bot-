@@ -11,7 +11,8 @@
 const { dirname } = require('path')
 const appDir = dirname(require.main.filename)
 var Utality = require(appDir + '/utality/utality')
-
+var Query = require(appDir+'/utality/query');
+ 
 module.exports = {
 	name: 'addworld',
 	// Refer to typings.d.ts for available properties.
@@ -23,7 +24,7 @@ module.exports = {
 		Utality.Log('Connected')
 		con.getConnection(function (err, conn) {
 			function queryData () {
-				var sql_select = 'SELECT * FROM world'
+				var sql_select = Query.all_world;
 				//World SQL
 				con.query(sql_select, function (err, result) {
 					if (err) throw err
@@ -39,7 +40,7 @@ module.exports = {
 				})
 			}
 			function AddData (data) {
-				var sql = 'INSERT INTO world (world_name) VALUES (?)'
+				var sql = Query.insert_world;
 				con.query(sql, [data], function (err, result) {
 					if (err) throw err
 					Utality.Log('1 record inserted')
