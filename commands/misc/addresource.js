@@ -18,8 +18,8 @@ module.exports = {
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		var con = require(appDir + '/utality/connection')
 		Utality.Log('Connected')
 		con.getConnection(function (err, conn) {

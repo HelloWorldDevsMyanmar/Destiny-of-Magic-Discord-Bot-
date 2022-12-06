@@ -18,8 +18,8 @@
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		try{
 			var con = require(appDir+'/utality/connection');
 		
