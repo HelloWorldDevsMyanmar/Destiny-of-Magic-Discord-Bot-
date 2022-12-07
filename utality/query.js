@@ -1,4 +1,5 @@
 const all_land='SELECT * FROM land ln JOIN `world` w ON ln.world_id = w.id'
+const select_land='SELECT * FROM land WHERE land_name LIKE ?'
 const insert_land='INSERT INTO land (land_name, world_id) VALUES (?,?)'
 const select_land_world='SELECT * FROM land ln JOIN `world` w ON ln.world_id = w.id where world_id= ?'
 
@@ -6,6 +7,7 @@ const all_resource='SELECT * FROM resources rs JOIN `world` w ON rs.world_id = w
 const insert_resource='INSERT INTO resources (world_id, resource_name, resource_quantity, fixed_amount) VALUES (?, ?, ?, ?)'
 
 const all_terrain='SELECT * FROM terrain'
+const select_terrain='SELECT * FROM terrain WHERE terrain_name LIKE ?'
 const insert_terrain='INSERT INTO terrain (terrain_name) VALUES (?)'
 
 const all_world='SELECT * FROM world'
@@ -17,6 +19,7 @@ const count_channel='SELECT count(*) from channels'
 
 const select_terrainland_linked='SELECT * FROM terrain_in_land til JOIN `terrain` t ON til.terrain_id=t.id JOIN `land` l ON l.id = til.land_id JOIN `world` w ON l.world_id = w.id ORDER BY t.terrain_name ASC'
 const insert_terrain_land='INSERT INTO terrain_in_land (terrain_id,land_id) VALUES (?,?)';
+const insert_exclude_terrain_in_land='INSERT INTO exclude_terrain_in_land (terrain_id,land_id) VALUES (?,?)';
 
 const select_terrain_event='SELECT * FROM terrain_event where terrain_in_land_id = ?'
 
@@ -41,11 +44,14 @@ module.exports = {
     all_resource,
     insert_resource ,
     all_terrain,
+    select_terrain,
     insert_terrain,
     all_world,
     insert_world,
     insert_channel,
     insert_terrain_land,
+    insert_exclude_terrain_in_land,
+    select_land,
     select_land_world,
     select_terrainland_linked,
     select_terrain_event,
