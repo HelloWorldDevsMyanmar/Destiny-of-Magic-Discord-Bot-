@@ -22,7 +22,7 @@ const appDir = dirname(require.main.filename);
 		
 			Utality.Log("Connected");
 			con.getConnection(function(err, conn) {
-				if (!conn.length) {Utality.Embed(message,result,"No Data","No Data");}
+				
                 if (err) throw err
 				console.log(`All Connections ${con._allConnections.length}`);
 				console.log(`Acquiring Connections ${con._acquiringConnections.length}`);
