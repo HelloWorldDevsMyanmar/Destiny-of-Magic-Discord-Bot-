@@ -34,6 +34,7 @@
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(LandName =>{
 							var json = {"Land ": LandName.land_name};
 							Utality.Embed(message,json,"Land List","List How Many Land In This Game.");
@@ -49,6 +50,7 @@
 					result
 				) {
 					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 					Utality.Log('1 record inserted')
 					Utality.Log(result[0].id)
 					var world_id = result[0].id

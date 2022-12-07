@@ -13,8 +13,8 @@
  var Utality = require(appDir+'/utality/utality');
  var Query = require(appDir+'/utality/query');
 
- module.exports = {
-	name: 'landlist',
+module.exports = {
+	name: 'querycheck',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -23,19 +23,21 @@
 		try{
 			var con = require(appDir+'/utality/connection');
 		
-			Utality.Log("Connected");
+			Utality.Log(message);
 			con.getConnection(function(err, conn) {
 				
 				function queryData() {
-					var sql_select = Query.all_land;
+					var sql_select = Query.search_resource_in_terrain_land_with_channelID;
 					//World SQL
-					con.query(sql_select, function (err, result) {
+					con.query(sql_select,[message.channelId], function (err, result) {
 					
-						if (err) throw err 
-						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
-						result.map(Land =>{
-							var json = {"Current Land are : ": Land.land_name};
-							Utality.Embed(message,json,"Land List","Current Lands Are.");
+						if (err) throw err
+                        if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
+						result.map(Query =>{
+                            Utality.Log("QUWEY")
+                            Utality.Log(Query)
+							// var json = {"Resources ": ResourceName.resource_name};
+							Utality.Embed(message,Query,"Query Data List","Query Details");
 						});
 							
 				});
