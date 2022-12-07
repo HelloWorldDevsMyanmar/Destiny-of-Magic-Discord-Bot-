@@ -18,8 +18,8 @@ module.exports = {
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		var con = require(appDir + '/utality/connection')
 		Utality.Log('Connected')
 		con.getConnection(function (err, conn) {
@@ -29,6 +29,7 @@ module.exports = {
 				//Resource SQL
 				con.query(sql_select, function (err, result) {
 					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 					result.map(ResourceName => {
 						var json = { 'Resource ': ResourceName.resource_name }
 						Utality.Embed(
@@ -47,6 +48,7 @@ module.exports = {
 					result
 				) {
 					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 					Utality.Log('1 record inserted')
 					Utality.Log(result[0].id)
 					var world_id = result[0].id

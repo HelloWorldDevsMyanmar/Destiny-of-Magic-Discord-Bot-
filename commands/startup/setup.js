@@ -17,6 +17,8 @@ const { dirname } = require('path');
 const appDir = dirname(require.main.filename);
 var Utality = require(appDir+'/utality/utality');
 const util = require('util');
+var Query = require(appDir+'/utality/query');
+
  module.exports = {
 	name: 'setup',
 	execute (message, args) {
@@ -32,6 +34,7 @@ const util = require('util');
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(RowDataPacket => {
 							var json = {"Category": RowDataPacket.world_name};
 							Utality.Embed(message,json,"World Created","A New World Has Been Created");
@@ -40,10 +43,11 @@ const util = require('util');
 							.then(category => {
 									//Land SQL
 									// const categoryid=category.id;
-									var sql_land = 'SELECT * FROM land where world_id= '+	RowDataPacket.id;
+									var sql_land = Query.select_land_world;
 									
-									con.query(sql_land, function (error, lands) {
+									con.query(sql_land,[RowDataPacket.id], function (error, lands) {
 										if (err) throw err 
+										if (!lands.length) {Utality.Embed(message,result,"No Data","No Data");}
 										lands.map(LandName =>{
 											
 											Utality.Log("Category Created");
@@ -56,38 +60,72 @@ const util = require('util');
 												Utality.Log(message.guild);
 												Utality.Log("Channel ID: "+landid_category);
 												Utality.Log("Land ID: "+landid);
-												var sql_terrain="Select * From terrain";
+												var sql_terrain=Query.all_terrain;
 												con.query(sql_terrain, function (err, Terrain) {
 													if (err) throw err 
-
+													if (!Terrain.length) {Utality.Embed(message,result,"No Data","No Data");}
 													
-													console.log(Terrain);
+													Utality.Log(Terrain);
 													Terrain.forEach((data) => {
 													var terrain_id=data.id;
 													var terrain_name=data.terrain_name;
-														message.guild.channels.create({ name: terrain_name+"", type: ChannelType.GuildText, reason: 'Terrain Channel' })
-													.then(category => {
-														category.setParent(landid_category);
+													var exist_sql=Query.check_exclude;
+													
+													con.query(exist_sql,[terrain_id,landid],function(err,condition){
+															
+															Utality.Log(condition.length)
+															Utality.Log("TERRAIN ID")
+															Utality.Log(terrain_id)
+															Utality.Log('LAND ID')
+															Utality.Log(landid)
+															Utality.Log("------------------------")
+															
+															condition.forEach((databool) => {
+																	Utality.Log(databool.DATABOOL);
+																	Utality.Log("------------------------")
+																	if(databool.DATABOOL!=1){
+																			Utality.Log(exist_sql +" "+ terrain_id +" "+landid);
+																			message.guild.channels.create({ name: terrain_name+"", type: ChannelType.GuildText, reason: 'Terrain Channel' })
+																			.then(category => {
+																				category.setParent(landid_category);
 
-																//Adding Important Server Features
-																//category_id = LandID
-														var sql = 'INSERT INTO channels (server_id,channel_name,channel_id,terrain_id,land_id,world_id) VALUES (?,?,?,?,?,?)'
-														
-														con.query(sql, [message.guild.id,message.guild.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
-															if (err) throw err 
-															Utality.Log("Terrain Created");
-															var json = {"Terrain": terrain_name};
-															Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
-														})
-														var land_terrain_sql = 'INSERT INTO terrain_in_land (terrain_id,land_id) VALUES (?,?)'
-														
-														con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
-															if (err) throw err 
-															Utality.Log("Land And Terrain Linked");
-															var json = {"Terrain": terrain_name};
-															Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
-														})
+																						//Adding Important Server Features
+																						//category_id = LandID
+																				var sql = Query.insert_channel;
+																				
+																				con.query(sql, [message.guild.id,category.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
+																					if (err) throw err 
+																					
+																					Utality.Log("Terrain Created");
+																					var json = {"Terrain": terrain_name};
+																					Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
+																				})
+																				var land_terrain_sql = Query.insert_terrain_land;
+																				
+																				con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
+																					if (err) throw err 
+																				
+																					Utality.Log("Land And Terrain Linked");
+																					var json = {"Terrain": terrain_name};
+																					Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
+																				})
+																				var countchannel=Query.count_channel;
+																				con.query(countchannel, function (err, result) {
+																					if (err) throw err
+																					
+																					
+																					
+																					 Utality.Embed(message,result[0],"Channel Count","Getting How Many Channel Count In Server");
+																				});
+																			});
+															}
+															});
+															
+															
 													});
+								
+													
+
 													})
 													
 													
@@ -101,6 +139,7 @@ const util = require('util');
 										})
 		
 									});
+									
 									}).catch(console.error);
 							})
 							

@@ -22,8 +22,8 @@
 
 
 	
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		var con = require(appDir+'/utality/connection');
 		Utality.Log("Connected");
 		con.getConnection(function(err, conn) {
@@ -34,6 +34,7 @@
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(LandName =>{
 							var json = {"Land ": LandName.land_name};
 							Utality.Embed(message,json,"Land List","List How Many Land In This Game.");
@@ -49,6 +50,7 @@
 					result
 				) {
 					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 					Utality.Log('1 record inserted')
 					Utality.Log(result[0].id)
 					var world_id = result[0].id
@@ -84,27 +86,27 @@
 		});
 
 
-		// console.log(message)
-		// console.log(args)
+		// Utality.Log(message)
+		// Utality.Log(args)
 	
 		// var con = require(appDir+'/utality/connection');
 		// con.connect(function (err) {
 		// 	if (err) throw err
-		// 	console.log('Connected!')
+		// 	Utality.Log('Connected!')
 		// 	var sql = 'INSERT INTO land (land_name, world_id) VALUES (?)'
 		// 	con.query(sql, [[args[0], args[1]]] , function (err, result) {
 		// 		if (err) throw err
-		// 		console.log('1 record inserted')
+		// 		Utality.Log('1 record inserted')
 		// 	})
 		// 	var sql_select = 'SELECT * FROM land'
 		// 	var land_array = [];
 		// 	con.query(sql_select, function (err, result) {
 		// 		if (err) throw err
-		// 		console.log(result);
+		// 		Utality.Log(result);
 		// 		result.map(RowDataPacket => {
 		// 			land_array.push(RowDataPacket.land_name);
 		// 		})
-		// 		console.log(land_array.toString());
+		// 		Utality.Log(land_array.toString());
 		// 		message.channel.send({ content: 'Adding land Successful!' })
 		// 		message.channel.send({ content: 'Current lands are' })
 		// 		message.channel.send({ content: land_array.toString() })

@@ -1,5 +1,5 @@
 var mysql = require('mysql')
-const { discord,EmbedBuilder } = require('discord.js');
+const { discord,EmbedBuilder,ChannelType } = require('discord.js');
 module.exports = {
     Log: function (output) {
         console.log(output);
@@ -16,12 +16,44 @@ module.exports = {
       
       exampleEmbed.setTimestamp();
       exampleEmbed.setFooter({ text: 'Created By Hello World Dev', iconURL: 'https://mmanime.org/frontend/img/mark.png' });
-     
-      for (var key in data_array) {
-        exampleEmbed.addFields({ name: key+"", value: data_array[key]+"", inline: true });
-       
+      if(data_array.length>0){
+        for (var key in data_array) {
+          exampleEmbed.addFields({ name: key+"", value: data_array[key]+"", inline: true });
+         
+        }
+      }else{
+        exampleEmbed.addFields({ name: "Data", value: "0", inline: true });
       }
+    
       client.channel.send({ embeds: [exampleEmbed] });
        
-    }
+    },
+    Public_Thread: function(message,title,autoArchiveDuration,reason){
+
+      message.startThread({
+        name: title,
+        autoArchiveDuration: autoArchiveDuration,
+        type: 'GUILD_PUBLIC_THREAD',
+        reason: reason
+    }).then(function(result) {
+       var threadid=result.id;
+        //Since This Is Async , Getting ThreadID is Difficult. Planning to Make Thread DB after Discusing Enemy Encounters
+     
+     });
+
+    },
+    Private_Thread: function(message,title,autoArchiveDuration,reason){
+
+      message.startThread({
+        name: title,
+        autoArchiveDuration: autoArchiveDuration,
+        type: ChannelType.PrivateThread,
+        reason: reason
+    }).then(function(result) {
+      var threadid=result.id;
+       //Since This Is Async , Getting ThreadID is Difficult. Planning to Make Thread DB after Discusing Enemy Encounters
+     });
+
+    },
+    
   };

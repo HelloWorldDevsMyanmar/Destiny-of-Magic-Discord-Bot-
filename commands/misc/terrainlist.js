@@ -18,8 +18,8 @@ module.exports = {
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		try{
 			var con = require(appDir+'/utality/connection');
 		
@@ -32,6 +32,7 @@ module.exports = {
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+                        if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(TerrainName =>{
 							var json = {"Terrain ": TerrainName.terrain_name};
 							Utality.Embed(message,json,"Terrain List","List How Many Terrains In This Game.");

@@ -18,8 +18,8 @@ module.exports = {
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		try{
 			var con = require(appDir+'/utality/connection');
 		
@@ -32,6 +32,7 @@ module.exports = {
 					con.query(sql_select, function (err, result) {
 					
 						if (err) throw err 
+						if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(WorldName =>{
 							var json = {"World ": WorldName.world_name};
 							Utality.Embed(message,json,"World List","List How Many World In This Game.");
