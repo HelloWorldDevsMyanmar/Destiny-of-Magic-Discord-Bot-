@@ -30,6 +30,7 @@ const select_resource_in_terrain_land='SELECT * FROM resource_in_terrain_land ri
 const select_resource_in_terrain_land_with_channel='SELECT * FROM resource_in_terrain_land ritl JOIN terrain_in_land tl ON ritl.terrain_in_land_id = tl.id JOIN resources rs ON ritl.resource_id = rs.id JOIN terrain t ON tl.terrain_id = t.id JOIN land lt ON tl.land_id = lt.id JOIN world w ON w.id = rs.world_id JOIN channels ch ON ch.land_id = lt.id AND w.id=ch.world_id AND t.id=ch.terrain_id'
 const search_resource_in_terrain_land_with_channelID='SELECT * FROM resource_in_terrain_land ritl JOIN terrain_in_land tl ON ritl.terrain_in_land_id = tl.id JOIN resources rs ON ritl.resource_id = rs.id JOIN terrain t ON tl.terrain_id = t.id JOIN land lt ON tl.land_id = lt.id JOIN world w ON w.id = rs.world_id JOIN channels ch ON ch.land_id = lt.id AND w.id=ch.world_id AND t.id=ch.terrain_id where channel_id = ?'
 
+const insert_exclude='INSERT INTO exclude_terrain_in_land (terrain_id, land_id) VALUES (?,?)'
 const check_exclude='SELECT EXISTS(SELECT * FROM exclude_terrain_in_land WHERE terrain_id= ? AND land_id = ?) AS DATABOOL'
 
 
@@ -56,6 +57,7 @@ module.exports = {
     select_resource_in_terrain_land,
     select_resource_in_terrain_land_with_channel,
     search_resource_in_terrain_land_with_channelID,
+    insert_exclude,
     check_exclude,
     count_channel
 
