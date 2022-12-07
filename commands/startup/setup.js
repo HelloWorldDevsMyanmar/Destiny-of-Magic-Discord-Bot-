@@ -69,31 +69,63 @@ var Query = require(appDir+'/utality/query');
 													Terrain.forEach((data) => {
 													var terrain_id=data.id;
 													var terrain_name=data.terrain_name;
-														message.guild.channels.create({ name: terrain_name+"", type: ChannelType.GuildText, reason: 'Terrain Channel' })
-													.then(category => {
-														category.setParent(landid_category);
+													var exist_sql=Query.check_exclude;
+													
+													con.query(exist_sql,[terrain_id,landid],function(err,condition){
+															
+															Utality.Log(condition.length)
+															Utality.Log("TERRAIN ID")
+															Utality.Log(terrain_id)
+															Utality.Log('LAND ID')
+															Utality.Log(landid)
+															Utality.Log("------------------------")
+															
+															condition.forEach((databool) => {
+																	Utality.Log(databool.DATABOOL);
+																	Utality.Log("------------------------")
+																	if(databool.DATABOOL!=1){
+																			Utality.Log(exist_sql +" "+ terrain_id +" "+landid);
+																			message.guild.channels.create({ name: terrain_name+"", type: ChannelType.GuildText, reason: 'Terrain Channel' })
+																			.then(category => {
+																				category.setParent(landid_category);
 
-																//Adding Important Server Features
-																//category_id = LandID
-														var sql = Query.insert_channel;
-														
-														con.query(sql, [message.guild.id,category.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
-															if (err) throw err 
-															if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
-															Utality.Log("Terrain Created");
-															var json = {"Terrain": terrain_name};
-															Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
-														})
-														var land_terrain_sql = Query.insert_terrain_land;
-														
-														con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
-															if (err) throw err 
-															if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
-															Utality.Log("Land And Terrain Linked");
-															var json = {"Terrain": terrain_name};
-															Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
-														})
+																						//Adding Important Server Features
+																						//category_id = LandID
+																				var sql = Query.insert_channel;
+																				
+																				con.query(sql, [message.guild.id,category.name,category.id,terrain_id,landid,RowDataPacket.id], function (err, result) {
+																					if (err) throw err 
+																					
+																					Utality.Log("Terrain Created");
+																					var json = {"Terrain": terrain_name};
+																					Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
+																				})
+																				var land_terrain_sql = Query.insert_terrain_land;
+																				
+																				con.query(land_terrain_sql, [terrain_id,landid], function (err, result) {
+																					if (err) throw err 
+																				
+																					Utality.Log("Land And Terrain Linked");
+																					var json = {"Terrain": terrain_name};
+																					Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
+																				})
+																				var countchannel=Query.count_channel;
+																				con.query(countchannel, function (err, result) {
+																					if (err) throw err
+																					
+																					
+																					
+																					 Utality.Embed(message,result[0],"Channel Count","Getting How Many Channel Count In Server");
+																				});
+																			});
+															}
+															});
+															
+															
 													});
+								
+													
+
 													})
 													
 													
@@ -107,6 +139,7 @@ var Query = require(appDir+'/utality/query');
 										})
 		
 									});
+									
 									}).catch(console.error);
 							})
 							

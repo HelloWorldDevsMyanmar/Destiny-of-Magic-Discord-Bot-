@@ -13,6 +13,7 @@ const select_world_name='SELECT * FROM world WHERE world_name LIKE ?'
 const insert_world='INSERT INTO world (world_name) VALUES (?)'
 
 const insert_channel='INSERT INTO channels (server_id,channel_name,channel_id,terrain_id,land_id,world_id) VALUES (?,?,?,?,?,?)'
+const count_channel='SELECT count(*) from channels'
 
 const select_terrainland_linked='SELECT * FROM terrain_in_land til JOIN `terrain` t ON til.terrain_id=t.id JOIN `land` l ON l.id = til.land_id JOIN `world` w ON l.world_id = w.id ORDER BY t.terrain_name ASC'
 const insert_terrain_land='INSERT INTO terrain_in_land (terrain_id,land_id) VALUES (?,?)';
@@ -29,6 +30,7 @@ const select_resource_in_terrain_land='SELECT * FROM resource_in_terrain_land ri
 const select_resource_in_terrain_land_with_channel='SELECT * FROM resource_in_terrain_land ritl JOIN terrain_in_land tl ON ritl.terrain_in_land_id = tl.id JOIN resources rs ON ritl.resource_id = rs.id JOIN terrain t ON tl.terrain_id = t.id JOIN land lt ON tl.land_id = lt.id JOIN world w ON w.id = rs.world_id JOIN channels ch ON ch.land_id = lt.id AND w.id=ch.world_id AND t.id=ch.terrain_id'
 const search_resource_in_terrain_land_with_channelID='SELECT * FROM resource_in_terrain_land ritl JOIN terrain_in_land tl ON ritl.terrain_in_land_id = tl.id JOIN resources rs ON ritl.resource_id = rs.id JOIN terrain t ON tl.terrain_id = t.id JOIN land lt ON tl.land_id = lt.id JOIN world w ON w.id = rs.world_id JOIN channels ch ON ch.land_id = lt.id AND w.id=ch.world_id AND t.id=ch.terrain_id where channel_id = ?'
 
+const check_exclude='SELECT EXISTS(SELECT * FROM exclude_terrain_in_land WHERE terrain_id= ? AND land_id = ?) AS DATABOOL'
 
 
 module.exports = { 
@@ -53,7 +55,9 @@ module.exports = {
     select_channel_id,
     select_resource_in_terrain_land,
     select_resource_in_terrain_land_with_channel,
-    search_resource_in_terrain_land_with_channelID
+    search_resource_in_terrain_land_with_channelID,
+    check_exclude,
+    count_channel
 
 
 }
