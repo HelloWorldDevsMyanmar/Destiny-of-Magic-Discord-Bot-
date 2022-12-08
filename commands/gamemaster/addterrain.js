@@ -56,12 +56,33 @@
                  // return the query back to the pool
                  conn.release()
              }
-             if (args[0] == null ) {
-				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"addterrain terrain_name" });
+             function ownercheck(server_id,discord_id){
+				var sql_select = Query.select_count_owner;
+				//World SQL
+				con.query(sql_select,[server_id,discord_id], function (err, result) {
+					Utality.Log(sql_select)
+					Utality.Log(server_id)
+					Utality.Log(discord_id)
+					Utality.Log(result)
+					if (err) throw err
+					if (!result.length) {Utality.Embed(message,result,"No Permission","Permission Denied");}
+					result.map(Query =>{
+						Utality.Log("QUWEY")
+						Utality.Log(Query.count)
+						// var json = {"Resources ": ResourceName.resource_name};
+						if(Query.count>0){
+							if (args[0] == null ) {
+								message.channel.send({ content: "Correct Command: "+Utality.Prefix+"addworld world_name" });
+							}
+							else{
+								AddData(args[0])
+							}
+						}else{Utality.Embed(message,result,"No Permission","Permission Denied");}
+						
+					});
+				});
 			}
-			else{
-				AddData(args[0])
-			}
+			ownercheck(message.guildId,message.author.id);
             
              //queryData()
              releaseQuery()
