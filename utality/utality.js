@@ -15,7 +15,7 @@ module.exports = {
       exampleEmbed.setDescription(description);
       
       exampleEmbed.setTimestamp();
-      exampleEmbed.setFooter({ text: 'Created By Hello World Dev', iconURL: 'https://mmanime.org/frontend/img/mark.png' });
+      exampleEmbed.setFooter({ text: 'Created By Hello World Dev', iconURL: 'https://raw.githubusercontent.com/HelloWorldDevsMyanmar/logo/main/Logo.png' });
       if(Object.keys(data_array).length>0){
         for (var key in data_array) {
           exampleEmbed.addFields({ name: key+"", value: data_array[key]+"", inline: true });

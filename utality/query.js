@@ -36,6 +36,10 @@ const search_resource_in_terrain_land_with_channelID='SELECT * FROM resource_in_
 const insert_exclude='INSERT INTO exclude_terrain_in_land (terrain_id, land_id) VALUES (?,?)'
 const check_exclude='SELECT EXISTS(SELECT * FROM exclude_terrain_in_land WHERE terrain_id= ? AND land_id = ?) AS DATABOOL'
 
+const all_item = 'SELECT * FROM item'
+const insert_item = 'INSERT INTO item (item_name,item_cost,item_description,item_stats) VALUES (?, ?, ?, ?)'
+// const insert_item = 'INSERT INTO item (item_name) VALUES (?)'
+
 
 module.exports = { 
     all_land, 
@@ -65,7 +69,7 @@ module.exports = {
     search_resource_in_terrain_land_with_channelID,
     insert_exclude,
     check_exclude,
-    count_channel
-
-
+    count_channel,
+    all_item,
+    insert_item,
 }
