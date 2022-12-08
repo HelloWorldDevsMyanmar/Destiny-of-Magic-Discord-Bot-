@@ -15,6 +15,9 @@ var Query = require(appDir+'/utality/query');
  
 module.exports = {
 	name: 'addresource',
+	description: "Reloads a command",
+	args: true,
+	cooldown: 5,
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {

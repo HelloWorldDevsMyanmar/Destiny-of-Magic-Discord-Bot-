@@ -44,6 +44,8 @@ const select_count_owner='SELECT count(*) as count FROM owner where server_id = 
 
 const insert_owner ='INSERT INTO owner (server_id,server_name,discord_user_id) VALUES (?,?,?)'
 
+const insert_shop ='INSERT INTO shop (shop_name,terrain_in_land_id) VALUES (?,?)'
+
 module.exports = { 
     all_land, 
     select_world_name,
@@ -77,5 +79,6 @@ module.exports = {
     insert_item,
     select_owner,
     insert_owner,
-    select_count_owner
+    select_count_owner,
+    insert_shop
 }
