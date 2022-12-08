@@ -16,8 +16,6 @@ module.exports = {
 	name: 'fireball',
 	// Refer to typings.d.ts for available properties.
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
 		var opponent_json = { 
             'Current Hp ': '70',
             'Max Hp ': '100',
