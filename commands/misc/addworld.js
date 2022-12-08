@@ -56,9 +56,15 @@ module.exports = {
 				// return the query back to the pool
 				conn.release()
 			}
-
-			AddData(args[0])
-			queryData()
+			if (args[0] == null ) {
+				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"addworld world_name" });
+			}
+			else{
+				AddData(args[0])
+			}
+		
+			
+			//queryData()
 			releaseQuery()
 			Utality.Log(`All Connections ${con._allConnections.length}`)
 			Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`)

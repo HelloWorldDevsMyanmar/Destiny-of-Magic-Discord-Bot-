@@ -5,6 +5,7 @@ module.exports = {
         console.log(output);
       // whatever
     },
+    Prefix: ">",
     Embed: function (client,data_array,title,description) {
        
       const exampleEmbed = new EmbedBuilder();
