@@ -8,9 +8,13 @@ module.exports = {
   aliases: ["h"],
   description: "Help",
   execute(message) {
-	let commands = [message.client.commands.values()]
-	console.log(commands);
-	Utality.Embed(message,commands,"Terrain List","List How Many Terrains In This Game.");
+	var arr = message.client.commands.entries();
+	for (let [key, value] of Object.entries(arr)) {
+		Utality.Log(value)
+	  }
+	Utality.Log(typeof arr)	
+
+//	Utality.Embed(message,jsonObj,"Terrain List","List How Many Terrains In This Game.");
 
     // let helpEmbed = new MessageEmbed()
     //   .setTitle("TEST")

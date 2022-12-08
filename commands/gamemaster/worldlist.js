@@ -20,7 +20,7 @@ module.exports = {
 	
 	// Refer to typings.d.ts for available properties.
 
-	execute (message, args) {
+	async execute (message, args) {
 		Utality.Log(message)
 		Utality.Log(args)
 		try{
