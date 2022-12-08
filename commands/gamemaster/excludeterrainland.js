@@ -15,6 +15,9 @@ var Query = require(appDir + '/utality/query')
 
 module.exports = {
 	name: 'excludeterrainland',
+	description: "Reloads a command",
+	args: true,
+	cooldown: 5,
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -84,7 +87,7 @@ module.exports = {
 							Utality.Embed(
 								message,
 								{
-									'Correct Command:': '?excludeterrainland TerrainName LandName'
+									'Correct Command:': ''+Utality.Prefix+'excludeterrainland TerrainName LandName'
 								},
 								'No Data',
 								'Your Land Name does not exist.'
@@ -138,7 +141,7 @@ module.exports = {
 						if(Query.count>0){
 							if (args[0] == null || args[1] == null) {
 								message.channel.send({
-									content: 'Correct Command: ?excludeterrainland TerrainName LandName'
+									content: 'Correct Command: '+Utality.Prefix+'excludeterrainland TerrainName LandName'
 								})
 							} else {
 								AddData(args[0], args[1])

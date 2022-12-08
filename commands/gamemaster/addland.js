@@ -15,6 +15,9 @@ var Query = require(appDir + '/utality/query')
 
 module.exports = {
 	name: 'addland',
+	description: "Reloads a command",
+	args: true,
+	cooldown: 5,
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -50,7 +53,7 @@ module.exports = {
 				) {
 					if (err) throw err
 					if (result == [] || !result.length) {
-						Utality.Embed(message, { 'Correct Command:': '?addland LandName WorldName'}, 'No Data', 'Your World Name does not exist.')
+						Utality.Embed(message, { 'Correct Command:': ''+Utality.Prefix+'addland LandName WorldName'}, 'No Data', 'Your World Name does not exist.')
 					} else {
 						Utality.Log('query selected')
 						Utality.Log(result[0].id)
