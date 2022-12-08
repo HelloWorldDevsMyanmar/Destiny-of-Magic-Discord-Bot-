@@ -14,11 +14,11 @@ const { mysql_user, mysql_pass, mysql_server, mysql_port,mysql_db} = require(app
 
 config = {
     connectionLimit: 10,
-    host: mysql_server,
-    port: mysql_port,
-    user: mysql_user,
-    password: mysql_pass,
-    database: mysql_db,
+    host: '127.0.0.1',
+    port: '3306',
+    user: 'root',
+    password: '',
+    database: 'world_data',
     waitForConnections: true,
     multipleStatements: true
   };

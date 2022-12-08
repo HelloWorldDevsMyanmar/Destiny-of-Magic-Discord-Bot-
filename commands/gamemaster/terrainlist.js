@@ -15,6 +15,8 @@
 
 module.exports = {
 	name: 'terrainlist',
+	description: "Reloads a command",
+	cooldown: 5,
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {

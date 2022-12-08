@@ -15,6 +15,9 @@
   
  module.exports = {
 	 name: 'additem',
+	 description: "Reloads a command",
+	 args: true,
+	 cooldown: 5,
 	 // Refer to typings.d.ts for available properties.
  
 	 execute (message, args) {
