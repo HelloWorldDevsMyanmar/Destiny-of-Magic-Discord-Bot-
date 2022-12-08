@@ -1,11 +1,13 @@
 var mysql = require('mysql')
 const { discord,EmbedBuilder,ChannelType } = require('discord.js');
+const { prefix } = require("./../config.json");
+
 module.exports = {
     Log: function (output) {
         console.log(output);
       // whatever
     },
-    Prefix: ">",
+    Prefix: prefix,
     Embed: function (client,data_array,title,description) {
        
       const exampleEmbed = new EmbedBuilder();
