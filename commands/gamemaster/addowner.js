@@ -12,7 +12,7 @@
  const appDir = dirname(require.main.filename)
  var Utality = require(appDir + '/utality/utality')
  var Query = require(appDir+'/utality/query');
-  
+ const { PermissionsBitField } = require('discord.js');
  module.exports = {
      name: 'add_gamemaster',
      // Refer to typings.d.ts for available properties.
@@ -57,12 +57,19 @@
                  // return the query back to the pool
                  conn.release()
              }
-             if (args[0] == null ) {
-				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"add_gamemaster Discord_ID" });
-			}
-			else{
-				AddData(args[0],message.guildId,message.guild.name)
-			}
+           
+            let memberTarget = message.guild.members.cache.get(message.author.id);
+            if (memberTarget.permissions.has(PermissionsBitField.Flags.Administrator)) {
+                if (args[0] == null ) {
+                    message.channel.send({ content: "Correct Command: "+Utality.Prefix+"add_gamemaster Discord_ID" });
+                }
+                else{
+                    AddData(args[0],message.guildId,message.guild.name)
+                }
+               
+            }else{
+                message.reply(`<@${memberTarget.user.id}> do not have permissions to edit this game`);
+            } 
              
             //  queryData()
              releaseQuery()
