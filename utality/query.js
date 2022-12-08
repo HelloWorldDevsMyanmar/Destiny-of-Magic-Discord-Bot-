@@ -39,7 +39,7 @@ const check_exclude='SELECT EXISTS(SELECT * FROM exclude_terrain_in_land WHERE t
 const all_item = 'SELECT * FROM item'
 const insert_item = 'INSERT INTO item (item_name,item_cost,item_description,item_stats) VALUES (?, ?, ?, ?)'
 // const insert_item = 'INSERT INTO item (item_name) VALUES (?)'
-const select_owner='SELECT * FROM owner where server_id = ? AND discord_user_id = ?'
+const select_owner='SELECT * FROM owner where server_id = ?'
 const insert_owner ='INSERT INTO owner (server_id,server_name,discord_user_id) VALUES (?,?,?)'
 
 module.exports = { 

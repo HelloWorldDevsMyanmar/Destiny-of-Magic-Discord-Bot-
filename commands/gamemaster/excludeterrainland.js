@@ -84,7 +84,7 @@ module.exports = {
 							Utality.Embed(
 								message,
 								{
-									'Correct Command:': '?excludeterrainland TerrainName LandName'
+									'Correct Command:': ''+Utality.Prefix+'excludeterrainland TerrainName LandName'
 								},
 								'No Data',
 								'Your Land Name does not exist.'
@@ -123,7 +123,7 @@ module.exports = {
 
 			if (args[0] == null || args[1] == null) {
 				message.channel.send({
-					content: 'Correct Command: ?excludeterrainland TerrainName LandName'
+					content: 'Correct Command: '+Utality.Prefix+'excludeterrainland TerrainName LandName'
 				})
 			} else {
 				AddData(args[0], args[1])
