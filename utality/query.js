@@ -43,7 +43,7 @@ const select_owner='SELECT * FROM owner where server_id = ? AND discord_user_id 
 const select_count_owner='SELECT count(*) as count FROM owner where server_id = ? AND discord_user_id = ?'
 
 const insert_owner ='INSERT INTO owner (server_id,server_name,discord_user_id) VALUES (?,?,?)'
-
+const capital_city_id="SELECT * FROM channels cha JOIN `terrain` t ON cha.terrain_id=t.id JOIN `land` l ON l.id = cha.land_id JOIN `world` w ON cha.world_id = w.id where cha.channel_id= ?"
 module.exports = { 
     all_land, 
     select_world_name,
@@ -77,5 +77,6 @@ module.exports = {
     insert_item,
     select_owner,
     insert_owner,
-    select_count_owner
+    select_count_owner,
+    capital_city_id
 }
