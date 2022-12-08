@@ -14,7 +14,10 @@
  var Query = require(appDir+'/utality/query');
  const { PermissionsBitField } = require('discord.js');
  module.exports = {
-     name: 'add_gamemaster',
+     name: 'addowner',
+     description: "Reloads a command",
+	 args: true,
+     cooldown: 5,
      // Refer to typings.d.ts for available properties.
  
      execute (message, args) {
