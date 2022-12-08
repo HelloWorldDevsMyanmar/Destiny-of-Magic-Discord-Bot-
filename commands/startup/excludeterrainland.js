@@ -14,7 +14,7 @@ var Utality = require(appDir + '/utality/utality')
 var Query = require(appDir + '/utality/query')
 
 module.exports = {
-	name: 'addland',
+	name: 'excludeterrainland',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
@@ -42,29 +42,77 @@ module.exports = {
 					})
 				})
 			}
-			function AddData (data, world) {
-				var sql_select_world = Query.select_world_name
-				con.query(sql_select_world, ['%' + world + '%'], function (
-					err,
-					result
-				) {
-					if (err) throw err
-					if (result == [] || !result.length) {
-						Utality.Embed(message, { 'Correct Command:': '?addland LandName WorldName'}, 'No Data', 'Your World Name does not exist.')
-					} else {
-						Utality.Log('query selected')
-						Utality.Log(result[0].id)
-						var world_id = result[0].id
-						var sql = Query.insert_land
-						con.query(sql, [data, world_id], function (err, result) {
-							if (err) throw err
-							Utality.Log('1 record inserted')
-							var json = { 'Land ': data }
-							Utality.Embed(message, json, 'A New Land Added', ' ')
-						})
-						queryData()
-					}
-				})
+			function AddData (terrain_name, land_name) {
+				var terrain_id
+				var land_id
+
+				//Select terrain_id using terrain_name
+				function get_terrain_id () {
+					var sql_select_terrain = Query.select_terrain
+					con.query(sql_select_terrain, ['%' + terrain_name + '%'], function (
+						err,
+						result
+					) {
+						if (err) throw err
+						if (result == [] || !result.length) {
+							Utality.Embed(
+								message,
+								{
+									'Correct Command:': '?excludeterrainland TerrainName LandName'
+								},
+								'No Data',
+								'Your Terrain Name does not exist.'
+							)
+						} else {
+							Utality.Log('query selected')
+							Utality.Log(result[0].id)
+							terrain_id = result[0].id
+							get_land_id()
+						}
+					})
+				}
+
+				//Select land_id using land_name
+				function get_land_id () {
+					var sql_select_land = Query.select_land
+					con.query(sql_select_land, ['%' + land_name + '%'], function (
+						err,
+						result
+					) {
+						if (err) throw err
+						if (result == [] || !result.length) {
+							Utality.Embed(
+								message,
+								{
+									'Correct Command:': '?excludeterrainland TerrainName LandName'
+								},
+								'No Data',
+								'Your Land Name does not exist.'
+							)
+						} else {
+							Utality.Log('query selected')
+							Utality.Log(result[0].id)
+							land_id = result[0].id
+							insert_into_exclude()
+						}
+					})
+				}
+
+				//insert into data exclude_terrain_in_land
+				function insert_into_exclude () {
+					var sql = Query.insert_exclude_terrain_in_land
+					con.query(sql, [terrain_id, land_id], function (err, result) {
+						Utality.Log(result)
+						if (err) throw err
+						Utality.Log('1 record inserted')
+						var json = { 'Terrain ': terrain_name, 'Land': land_name }
+						Utality.Embed(message, json, 'This has been excluded', ' ')
+					})
+					queryData()
+				}
+
+				get_terrain_id()
+				Utality.Log('shit')
 			}
 
 			function releaseQuery () {
@@ -74,12 +122,13 @@ module.exports = {
 			}
 
 			if (args[0] == null || args[1] == null) {
-				message.channel.send({ content: "Correct Command: ?addland LandName WorldName" });
-			}
-			else{
+				message.channel.send({
+					content: 'Correct Command: ?excludeterrainland TerrainName LandName'
+				})
+			} else {
 				AddData(args[0], args[1])
 			}
-			
+
 			releaseQuery()
 			Utality.Log(`All Connections ${con._allConnections.length}`)
 			Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`)
