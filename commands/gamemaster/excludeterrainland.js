@@ -48,6 +48,8 @@ module.exports = {
 			function AddData (terrain_name, land_name) {
 				var terrain_id
 				var land_id
+				var database_terrain_name
+				var database_land_name
 
 				//Select terrain_id using terrain_name
 				function get_terrain_id () {
@@ -61,7 +63,7 @@ module.exports = {
 							Utality.Embed(
 								message,
 								{
-									'Correct Command:': '?excludeterrainland TerrainName LandName'
+									'Correct Command:': ''+Utality.Prefix+'excludeterrainland TerrainName LandName'
 								},
 								'No Data',
 								'Your Terrain Name does not exist.'
@@ -70,6 +72,7 @@ module.exports = {
 							Utality.Log('query selected')
 							Utality.Log(result[0].id)
 							terrain_id = result[0].id
+							database_terrain_name = result[0].terrain_name
 							get_land_id()
 						}
 					})
@@ -87,7 +90,7 @@ module.exports = {
 							Utality.Embed(
 								message,
 								{
-									'Correct Command:': '?excludeterrainland TerrainName LandName'
+									'Correct Command:': ''+Utality.Prefix+'excludeterrainland TerrainName LandName'
 								},
 								'No Data',
 								'Your Land Name does not exist.'
@@ -96,6 +99,7 @@ module.exports = {
 							Utality.Log('query selected')
 							Utality.Log(result[0].id)
 							land_id = result[0].id
+							database_land_name = result[0].land_name
 							insert_into_exclude()
 						}
 					})
@@ -108,7 +112,7 @@ module.exports = {
 						Utality.Log(result)
 						if (err) throw err
 						Utality.Log('1 record inserted')
-						var json = { 'Terrain ': terrain_name, 'Land': land_name }
+						var json = { 'Terrain ': database_terrain_name, 'Land': database_land_name }
 						Utality.Embed(message, json, 'This has been excluded', ' ')
 					})
 					queryData()
@@ -141,7 +145,7 @@ module.exports = {
 						if(Query.count>0){
 							if (args[0] == null || args[1] == null) {
 								message.channel.send({
-									content: 'Correct Command: ?excludeterrainland TerrainName LandName'
+									content: 'Correct Command: '+Utality.Prefix+'excludeterrainland TerrainName LandName'
 								})
 							} else {
 								AddData(args[0], args[1])
