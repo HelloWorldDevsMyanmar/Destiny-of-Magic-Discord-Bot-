@@ -56,9 +56,16 @@
 				 // return the query back to the pool
 				 conn.release()
 			 }
- 
-			 AddData(args[0],args[1],args[2],args[3])
-			 queryData()
+			 if (args[0] == null || args[1] == null || args[2] == null || args[3] == null) {
+				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"additem itemname cost description stats" });
+			}
+			else{
+				AddData(args[0],args[1],args[2],args[3])
+			}
+			
+			
+
+			 //queryData()
 			 releaseQuery()
 			 Utality.Log(`All Connections ${con._allConnections.length}`)
 			 Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`)

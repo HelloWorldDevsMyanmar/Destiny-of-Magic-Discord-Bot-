@@ -12,9 +12,9 @@
  const appDir = dirname(require.main.filename)
  var Utality = require(appDir + '/utality/utality')
  var Query = require(appDir+'/utality/query');
-
+  
  module.exports = {
-     name: 'addterrain',
+     name: 'add_gamemaster',
      // Refer to typings.d.ts for available properties.
  
      execute (message, args) {
@@ -24,30 +24,31 @@
          Utality.Log('Connected')
          con.getConnection(function (err, conn) {
              function queryData () {
-                 var sql_select = Query.all_terrain;
+                 var sql_select = Query.select_owner;
                  //World SQL
-                 con.query(sql_select, function (err, result) {
+                 con.query(sql_select,[message.guildId], function (err, result) {
                      if (err) throw err
                      if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
-                     result.map(TerrainName => {
-                         var json = { 'Terrain ': TerrainName.terrain_name }
+                     result.map(Owner => {
+                         var json = { 'Owner List ': '<@'+Owner.discord_user_id+'>' }
                          Utality.Embed(
                              message,
                              json,
-                             'Terrain List',
-                             'List How Many Terrain In This Game.'
+                             'Owner List',
+                             'List How Many Owners In This Game.'
                          )
                      })
                  })
              }
-             function AddData (data) {
-                 var sql = Query.insert_terrain;
-                 con.query(sql, [data], function (err, result) {
+             function AddData (data,server_id,server_name) {
+                 var sql = Query.insert_owner;
+                 var data = data.replace(/\D/g, "");
+                 con.query(sql, [server_id,server_name,data], function (err, result) {
                      if (err) throw err
-                    
+                     
                      Utality.Log('1 record inserted')
-                     var json = { 'Terrain ': data }
-                     Utality.Embed(message, json, 'A New Terrain Added', ' ')
+                     var json = { 'Owner ': '<@'+data+'>' }
+                     Utality.Embed(message, json, 'A New World Added', ' ')
                  })
              }
  
@@ -57,13 +58,13 @@
                  conn.release()
              }
              if (args[0] == null ) {
-				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"addterrain terrain_name" });
+				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"add_gamemaster Discord_ID" });
 			}
 			else{
-				AddData(args[0])
+				AddData(args[0],message.guildId,message.guild.name)
 			}
-            
-             //queryData()
+             
+            //  queryData()
              releaseQuery()
              Utality.Log(`All Connections ${con._allConnections.length}`)
              Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`)

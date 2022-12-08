@@ -74,12 +74,12 @@ module.exports = {
 			}
 
 			if (args[0] == null || args[1] == null) {
-				message.channel.send({ content: "Correct Command: ?addland LandName WorldName" });
+				message.channel.send({ content: "Correct Command: "+Utality.Prefix+"addland LandName WorldName" });
 			}
 			else{
 				AddData(args[0], args[1])
 			}
-			
+			//queryData()
 			releaseQuery()
 			Utality.Log(`All Connections ${con._allConnections.length}`)
 			Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`)
