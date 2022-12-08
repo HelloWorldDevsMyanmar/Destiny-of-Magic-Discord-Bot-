@@ -29,24 +29,9 @@ module.exports = {
 				function queryData(server_id,discord_id) {
 					Utality.Log(discord_id)
 					Utality.Log(server_id)
-					var sql_select = Query.select_owner;
-					//World SQL
-					con.query(sql_select,[server_id,discord_id], function (err, result) {
-						Utality.Log(sql_select)
-						Utality.Log(server_id)
-						Utality.Log(discord_id)
-						Utality.Log(result)
-						if (err) throw err
-                        if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
-						result.map(Query =>{
-                            Utality.Log("QUWEY")
-                            Utality.Log(Query)
-							// var json = {"Resources ": ResourceName.resource_name};
-							Utality.Embed(message,Query,"Query Data List","Query Details");
-						});
-							
-				});
-			}
+					var exist_sql=Query.check_exclude;
+													
+				}
 			
 				function releaseQuery() {
 					Utality.Log("Log Out")

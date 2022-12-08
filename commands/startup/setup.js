@@ -43,7 +43,7 @@ var Query = require(appDir+'/utality/query');
 							.then(category => {
 									//Land SQL
 									// const categoryid=category.id;
-									var sql_land = Query.select_land_world;
+									var sql_land = Query.all_select_land;
 									
 									con.query(sql_land,[RowDataPacket.id], function (error, lands) {
 										if (err) throw err 
@@ -97,8 +97,8 @@ var Query = require(appDir+'/utality/query');
 																					if (err) throw err 
 																					
 																					Utality.Log("Terrain Created");
-																					var json = {"Terrain": terrain_name};
-																					Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
+																					//var json = {"Terrain": terrain_name};
+																					//Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
 																				})
 																				var land_terrain_sql = Query.insert_terrain_land;
 																				
@@ -109,14 +109,14 @@ var Query = require(appDir+'/utality/query');
 																					var json = {"Terrain": terrain_name};
 																					Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
 																				})
-																				var countchannel=Query.count_channel;
-																				con.query(countchannel, function (err, result) {
-																					if (err) throw err
+																				// var countchannel=Query.count_channel;
+																				// con.query(countchannel, function (err, result) {
+																				// 	if (err) throw err
 																					
 																					
 																					
-																					 Utality.Embed(message,result[0],"Channel Count","Getting How Many Channel Count In Server");
-																				});
+																				// 	 Utality.Embed(message,result[0],"Channel Count","Getting How Many Channel Count In Server");
+																				// });
 																			});
 															}
 															});
