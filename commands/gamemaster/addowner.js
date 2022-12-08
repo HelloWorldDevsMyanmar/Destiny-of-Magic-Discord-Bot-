@@ -48,7 +48,7 @@
                      
                      Utality.Log('1 record inserted')
                      var json = { 'Owner ': '<@'+data+'>' }
-                     Utality.Embed(message, json, 'A New World Added', ' ')
+                     Utality.Embed(message, json, 'A New World Owner Added', ' ')
                  })
              }
  
