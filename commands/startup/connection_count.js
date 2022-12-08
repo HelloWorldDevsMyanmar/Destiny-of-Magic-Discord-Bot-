@@ -23,6 +23,7 @@ const appDir = dirname(require.main.filename);
 			Utality.Log("Connected");
 			con.getConnection(function(err, conn) {
 				
+                if (err) throw err
 				console.log(`All Connections ${con._allConnections.length}`);
 				console.log(`Acquiring Connections ${con._acquiringConnections.length}`);
 				console.log(`Free Connections ${con._freeConnections.length}`);

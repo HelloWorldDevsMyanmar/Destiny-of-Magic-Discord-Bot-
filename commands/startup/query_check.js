@@ -11,29 +11,38 @@
  const { dirname } = require('path');
  const appDir = dirname(require.main.filename);
  var Utality = require(appDir+'/utality/utality');
- 
- module.exports = {
-	name: 'landlist',
+ var Query = require(appDir+'/utality/query');
+
+module.exports = {
+	name: 'querycheck',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
-		console.log(message)
-		console.log(args)
+		Utality.Log(message)
+		Utality.Log(args)
 		try{
 			var con = require(appDir+'/utality/connection');
 		
-			Utality.Log("Connected");
+			Utality.Log(message);
 			con.getConnection(function(err, conn) {
 				
-				function queryData() {
-					var sql_select = 'SELECT * FROM land'
+				function queryData(server_id,discord_id) {
+					Utality.Log(discord_id)
+					Utality.Log(server_id)
+					var sql_select = Query.select_owner;
 					//World SQL
-					con.query(sql_select, function (err, result) {
-					
-						if (err) throw err 
-						result.map(Land =>{
-							var json = {"Current Land are : ": Land.land_name};
-							Utality.Embed(message,json,"Land List","Current Lands Are.");
+					con.query(sql_select,[server_id,discord_id], function (err, result) {
+						Utality.Log(sql_select)
+						Utality.Log(server_id)
+						Utality.Log(discord_id)
+						Utality.Log(result)
+						if (err) throw err
+                        if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
+						result.map(Query =>{
+                            Utality.Log("QUWEY")
+                            Utality.Log(Query)
+							// var json = {"Resources ": ResourceName.resource_name};
+							Utality.Embed(message,Query,"Query Data List","Query Details");
 						});
 							
 				});
@@ -45,7 +54,7 @@
 					conn.release();
 				}
 			
-				queryData();
+				queryData(message.guildId,message.author.id);
 				releaseQuery();
 				Utality.Log(`All Connections ${con._allConnections.length}`);
 				Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`);
