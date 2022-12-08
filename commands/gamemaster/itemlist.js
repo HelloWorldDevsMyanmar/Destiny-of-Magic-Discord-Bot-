@@ -12,12 +12,14 @@
  const appDir = dirname(require.main.filename);
  var Utality = require(appDir+'/utality/utality');
  var Query = require(appDir+'/utality/query');
-
+var check=false;
 module.exports = {
 	name: 'itemlist',
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
+		
+		Utality.Log(check)
 		Utality.Log(message)
 		Utality.Log(args)
 		try{

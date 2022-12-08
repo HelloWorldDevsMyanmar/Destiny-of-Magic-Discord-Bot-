@@ -26,11 +26,16 @@ module.exports = {
 			Utality.Log(message);
 			con.getConnection(function(err, conn) {
 				
-				function queryData() {
-					var sql_select = Query.search_resource_in_terrain_land_with_channelID;
+				function queryData(server_id,discord_id) {
+					Utality.Log(discord_id)
+					Utality.Log(server_id)
+					var sql_select = Query.select_owner;
 					//World SQL
-					con.query(sql_select,[message.channelId], function (err, result) {
-					
+					con.query(sql_select,[server_id,discord_id], function (err, result) {
+						Utality.Log(sql_select)
+						Utality.Log(server_id)
+						Utality.Log(discord_id)
+						Utality.Log(result)
 						if (err) throw err
                         if (!result.length) {Utality.Embed(message,result,"No Data","No Data");}
 						result.map(Query =>{
@@ -49,7 +54,7 @@ module.exports = {
 					conn.release();
 				}
 			
-				queryData();
+				queryData(message.guildId,message.author.id);
 				releaseQuery();
 				Utality.Log(`All Connections ${con._allConnections.length}`);
 				Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`);
