@@ -15,6 +15,8 @@
 
 module.exports = {
 	name: 'querycheck',
+	owner:false,
+	description: "Invite the bot to your server!",
 	// Refer to typings.d.ts for available properties.
 
 	execute (message, args) {
