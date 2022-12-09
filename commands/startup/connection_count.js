@@ -14,6 +14,8 @@ const appDir = dirname(require.main.filename);
  var Utality = require(appDir+'/utality/utality');
  module.exports = {
 	name: "connection_count",
+	owner:true,
+	description: "Invite the bot to your server!",
 	// Refer to typings.d.ts for available properties.
 
 	execute(message, args) {

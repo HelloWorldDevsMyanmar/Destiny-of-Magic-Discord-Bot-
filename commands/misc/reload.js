@@ -15,6 +15,7 @@ module.exports = {
 	name: "reload",
 	description: "Reloads a command",
 	args: true,
+	owner:true,
 	ownerOnly: true,
 
 	execute(message, args) {

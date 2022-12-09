@@ -14,6 +14,8 @@ var Utality = require(appDir + '/utality/utality')
 
 module.exports = {
 	name: 'fireball',
+	owner:false,
+	description: "Invite the bot to your server!",
 	// Refer to typings.d.ts for available properties.
 	execute (message, args) {
 		var opponent_json = { 
