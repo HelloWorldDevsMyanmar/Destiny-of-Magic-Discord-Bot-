@@ -45,7 +45,6 @@ const select_owner='SELECT * FROM owner where server_id = ? AND discord_user_id 
 const select_count_owner='SELECT count(*) as count FROM owner where server_id = ? AND discord_user_id = ?'
 
 const insert_owner ='INSERT INTO owner (server_id,server_name,discord_user_id) VALUES (?,?,?)'
-
 const insert_shop ='INSERT INTO shop (shop_name,terrain_in_land_id) VALUES (?,?)'
 
 module.exports = { 

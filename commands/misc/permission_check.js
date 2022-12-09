@@ -11,6 +11,8 @@
  const { PermissionsBitField } = require('discord.js');
  module.exports = {
 	name: "permission",
+    owner:true,
+    description: "Invite the bot to your server!",
 	// Refer to typings.d.ts for available properties.
 
 	execute(message, args) {

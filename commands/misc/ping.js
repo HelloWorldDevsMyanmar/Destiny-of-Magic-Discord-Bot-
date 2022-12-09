@@ -10,6 +10,8 @@
  */
 module.exports = {
 	name: "ping",
+	owner:false,
+	description: "Invite the bot to your server!",
 	// Refer to typings.d.ts for available properties.
 
 	execute(message, args) {
