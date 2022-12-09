@@ -21,6 +21,8 @@ var Query = require(appDir+'/utality/query');
 
  module.exports = {
 	name: 'setup',
+	owner:true,
+	description: "Invite the bot to your server!",
 	execute (message, args) {
 		try{
 			var con = require(appDir+'/utality/connection');
@@ -153,7 +155,28 @@ var Query = require(appDir+'/utality/query');
 					conn.release();
 				}
 			
-				queryData();
+				function ownercheck(server_id,discord_id){
+					var sql_select = Query.select_count_owner;
+					//World SQL
+					con.query(sql_select,[server_id,discord_id], function (err, result) {
+						Utality.Log(sql_select)
+						Utality.Log(server_id)
+						Utality.Log(discord_id)
+						Utality.Log(result)
+						if (err) throw err
+                        if (!result.length) {Utality.Embed(message,result,"No Permission","Permission Denied");}
+						result.map(Query =>{
+                            Utality.Log("QUWEY")
+                            Utality.Log(Query.count)
+							// var json = {"Resources ": ResourceName.resource_name};
+							if(Query.count>0){
+								queryData();
+							}else{Utality.Embed(message,result,"No Permission","Permission Denied");}
+							
+						});
+					});
+				}
+				ownercheck(message.guildId,message.author.id);
 				releaseQuery();
 				Utality.Log(`All Connections ${con._allConnections.length}`);
 				Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`);

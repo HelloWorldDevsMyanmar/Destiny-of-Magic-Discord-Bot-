@@ -21,6 +21,8 @@ module.exports = {
       exampleEmbed.setFooter({ text: 'Created By Hello World Dev', iconURL: 'https://raw.githubusercontent.com/HelloWorldDevsMyanmar/logo/main/Logo.png' });
       if(Object.keys(data_array).length>0){
         for (var key in data_array) {
+          console.log(key)
+          console.log(data_array)
           exampleEmbed.addFields({ name: key+"", value: data_array[key]+"", inline: true });
          
         }
