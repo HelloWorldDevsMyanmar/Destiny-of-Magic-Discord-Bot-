@@ -1,132 +1,105 @@
-/**
- * @file Dynamic help command
- * @author Naman Vrati
- * @since 1.0.0
- * @version 3.3.0
- */
-
-// Deconstructing prefix from config file to use in help command
 const { prefix } = require("./../../config.json");
+const { dirname } = require('path');
+ const appDir = dirname(require.main.filename);
+ const { discord,EmbedBuilder,ChannelType } = require('discord.js');
 
-// Deconstructing EmbedBuilder to create embeds within this command
-const { EmbedBuilder, ChannelType } = require("discord.js");
+var Utality = require(appDir+'/utality/utality');
+var json = {};
+var count=0;
+var Query = require(appDir+'/utality/query');
 
-/**
- * @type {import('../../typings').LegacyCommand}
- */
 module.exports = {
-	name: "help",
-	description: "List all commands of bot or info about a specific command.",
-	aliases: ["commands"],
-	usage: "[command name]",
-	cooldown: 5,
+  name: "help",
+  aliases: ["h"],
+  description: "Help",
+  owner:false,
+  execute(message) {
+	var arr = message.client.commands;
+	var userid=message.author.id;
 
-	execute(message, args) {
-		const { commands } = message.client;
+	  const exampleEmbed = new EmbedBuilder();
+      exampleEmbed.setColor('#'+(Math.random()*0xFFFFFF<<0).toString(16));
+      exampleEmbed.setTitle("HELP");
+      
+      
+      exampleEmbed.setDescription("HELP COMMANDS OF THE GAME");
+      
+      exampleEmbed.setTimestamp();
+      exampleEmbed.setFooter({ text: 'Created By Hello World Dev', iconURL: 'https://raw.githubusercontent.com/HelloWorldDevsMyanmar/logo/main/Logo.png' });
+	  var con = require(appDir + '/utality/connection')
+	  Utality.Log('Connected')
+	  con.getConnection(function (err, conn) {
+		  function queryData (server_id,owner_id) {
+				Utality.Log(server_id)
+				Utality.Log(owner_id)
+			  var sql_select = Query.select_owner;
+			  //World SQL
+			  con.query(sql_select,[server_id,owner_id], function (err, result) {
+				  if (err) throw err
+				  if (!result.length) {
+					sentEmbeded(arr,false)
+				  }
+				  result.map(Owner => {
+					sentEmbeded(arr,true)
+					
+				  })
+			  })
+		  }
+		
 
-		// If there are no args, it means it needs whole help command.
+		  function releaseQuery () {
+			  Utality.Log('Log Out')
+			  // return the query back to the pool
+			  conn.release()
+		  }
 
-		if (!args.length) {
-			/**
-			 * @type {EmbedBuilder}
-			 * @description Help command embed object
-			 */
+		  function sentEmbeded(arr,owner){
+			if(owner){
+				arr.forEach((value, key) => {
+			
+					//Utality.Log(key)
+					var valuedata= JSON.parse(JSON.stringify(value));
+					if(valuedata.owner){
+						exampleEmbed.addFields({ name: '__**'+valuedata.name+'**__', value:valuedata.description, inline: true });
+					}else{
+						exampleEmbed.addFields({ name: valuedata.name, value:valuedata.description, inline: true });	
+					}
+					
+					// const newLocal = Utality.Log(typeof json);
+				  }); 
+				  message.channel.send({ embeds: [exampleEmbed] });
+			}else{
+				arr.forEach((value, key) => {
+			
+					//Utality.Log(key)
+					var valuedata= JSON.parse(JSON.stringify(value));
+					if(!valuedata.owner){
+						exampleEmbed.addFields({ name: valuedata.name, value:valuedata.description, inline: true });
+					}
+					
+					// const newLocal = Utality.Log(typeof json);
+				  }); 
+				  message.channel.send({ embeds: [exampleEmbed] });
+			}
+		  }
+		
+		  
+		  
+		 //  queryData()
+		 queryData(message.guildId,userid)
+			releaseQuery()
+		  Utality.Log(`All Connections ${con._allConnections.length}`)
+		  Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`)
+		  Utality.Log(`Free Connections ${con._freeConnections.length}`)
+		  Utality.Log(`Queue Connections ${con._connectionQueue.length}`)
+	  })
+	
+    
+     
+    
+	
 
-			let helpEmbed = new EmbedBuilder()
-				.setColor("Random")
-				.setTitle("List of all my commands")
-				.setDescription(
-					"`" + commands.map((command) => command.name).join("`, `") + "`"
-				)
+	
 
-				.addFields([
-					{
-						name: "Usage",
-						value: `\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,
-					},
-				]);
-
-			// Attempts to send embed in DMs.
-
-			return message.author
-				.send({ embeds: [helpEmbed] })
-
-				.then(() => {
-					if (message.channel.type === ChannelType.DM) return;
-
-					// On validation, reply back.
-
-					message.reply({
-						content: "I've sent you a DM with all my commands!",
-					});
-				})
-				.catch((error) => {
-					// On failing, throw error.
-
-					console.error(
-						`Could not send help DM to ${message.author.tag}.\n`,
-						error
-					);
-
-					message.reply({ content: "It seems like I can't DM you!" });
-				});
-		}
-
-		// If argument is provided, check if it's a command.
-
-		/**
-		 * @type {String}
-		 * @description First argument in lower case
-		 */
-
-		const name = args[0].toLowerCase();
-
-		const command =
-			commands.get(name) ||
-			commands.find((c) => c.aliases && c.aliases.includes(name));
-
-		// If it's an invalid command.
-
-		if (!command) {
-			return message.reply({ content: "That's not a valid command!" });
-		}
-
-		/**
-		 * @type {EmbedBuilder}
-		 * @description Embed of Help command for a specific command.
-		 */
-
-		let commandEmbed = new EmbedBuilder()
-			.setColor("Random")
-			.setTitle("Command Help");
-
-		if (command.description)
-			commandEmbed.setDescription(`${command.description}`);
-
-		if (command.aliases)
-			commandEmbed.addFields([
-				{
-					name: "Aliases",
-					value: `\`${command.aliases.join(", ")}\``,
-					inline: true,
-				},
-				{
-					name: "Cooldown",
-					value: `${command.cooldown || 3} second(s)`,
-					inline: true,
-				},
-			]);
-		if (command.usage)
-			commandEmbed.addFields([
-				{
-					name: "Usage",
-					value: `\`${prefix}${command.name} ${command.usage}\``,
-					inline: true,
-				},
-			]);
-
-		// Finally send the embed.
-
-		message.channel.send({ embeds: [commandEmbed] });
-	},
+  }
 };

@@ -17,6 +17,8 @@
 
  module.exports = {
 	name: "shop",
+	owner:true,
+	description: "Invite the bot to your server!",
 	// Refer to typings.d.ts for available properties.
 
 	async execute(interaction, client) {

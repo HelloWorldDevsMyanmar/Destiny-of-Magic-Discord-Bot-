@@ -14,10 +14,14 @@
  var Query = require(appDir+'/utality/query');
  const { PermissionsBitField } = require('discord.js');
  module.exports = {
-     name: 'add_gamemaster',
+     name: 'addowner',
+     description: "Reloads a command",
+	 args: true,
+     owner:false,
+     cooldown: 5,
      // Refer to typings.d.ts for available properties.
  
-     execute (message, args) {
+     async execute (message, args) {
          Utality.Log(message)
          Utality.Log(args)
          var con = require(appDir + '/utality/connection')

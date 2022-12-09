@@ -21,6 +21,7 @@ module.exports = {
 	description: "Invite the bot to your server!",
 	aliases: ["commands"],
 	usage: "Invite the bot to your server!",
+	owner:false,
 	cooldown: 5,
 
 	execute(message, args) {

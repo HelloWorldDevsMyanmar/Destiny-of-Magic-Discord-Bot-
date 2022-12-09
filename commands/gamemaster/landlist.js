@@ -15,9 +15,13 @@
 
  module.exports = {
 	name: 'landlist',
+	description: "Reloads a command",
+	owner:true,
+	cooldown: 5,
+	
 	// Refer to typings.d.ts for available properties.
 
-	execute (message, args) {
+	async execute (message, args) {
 		Utality.Log(message)
 		Utality.Log(args)
 		try{

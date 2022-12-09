@@ -22,19 +22,19 @@ config = {
     waitForConnections: true,
     multipleStatements: true
   };
-  
+
   var con = mysql.createPool(config);
   Utality.Log(con);
   // Attempt to catch disconnects 
   con.on('connection', function (connection) {
     console.log('DB Connection established');
-  
+
     con.on('error', function (err) {
       console.error(new Date(), 'MySQL error', err.code);
     });
     con.on('close', function (err) {
       console.error(new Date(), 'MySQL close', err);
     });
-  
+
   });
 module.exports = con;

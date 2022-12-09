@@ -21,6 +21,8 @@ var Query = require(appDir+'/utality/query');
 
  module.exports = {
 	name: 'setup',
+	owner:true,
+	description: "Invite the bot to your server!",
 	execute (message, args) {
 		try{
 			var con = require(appDir+'/utality/connection');
@@ -43,7 +45,7 @@ var Query = require(appDir+'/utality/query');
 							.then(category => {
 									//Land SQL
 									// const categoryid=category.id;
-									var sql_land = Query.select_land_world;
+									var sql_land = Query.all_select_land;
 									
 									con.query(sql_land,[RowDataPacket.id], function (error, lands) {
 										if (err) throw err 
@@ -97,8 +99,8 @@ var Query = require(appDir+'/utality/query');
 																					if (err) throw err 
 																					
 																					Utality.Log("Terrain Created");
-																					var json = {"Terrain": terrain_name};
-																					Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
+																					//var json = {"Terrain": terrain_name};
+																					//Utality.Embed(message,json,"Terrain Created","A New Terrain in "+LandName.land_name+" Has Been Created");
 																				})
 																				var land_terrain_sql = Query.insert_terrain_land;
 																				
@@ -109,14 +111,14 @@ var Query = require(appDir+'/utality/query');
 																					var json = {"Terrain": terrain_name};
 																					Utality.Embed(message,json,"Terrain And Land Linked","A New Terrain in "+LandName.land_name+" Has Been Linked");
 																				})
-																				var countchannel=Query.count_channel;
-																				con.query(countchannel, function (err, result) {
-																					if (err) throw err
+																				// var countchannel=Query.count_channel;
+																				// con.query(countchannel, function (err, result) {
+																				// 	if (err) throw err
 																					
 																					
 																					
-																					 Utality.Embed(message,result[0],"Channel Count","Getting How Many Channel Count In Server");
-																				});
+																				// 	 Utality.Embed(message,result[0],"Channel Count","Getting How Many Channel Count In Server");
+																				// });
 																			});
 															}
 															});
@@ -153,7 +155,28 @@ var Query = require(appDir+'/utality/query');
 					conn.release();
 				}
 			
-				queryData();
+				function ownercheck(server_id,discord_id){
+					var sql_select = Query.select_count_owner;
+					//World SQL
+					con.query(sql_select,[server_id,discord_id], function (err, result) {
+						Utality.Log(sql_select)
+						Utality.Log(server_id)
+						Utality.Log(discord_id)
+						Utality.Log(result)
+						if (err) throw err
+                        if (!result.length) {Utality.Embed(message,result,"No Permission","Permission Denied");}
+						result.map(Query =>{
+                            Utality.Log("QUWEY")
+                            Utality.Log(Query.count)
+							// var json = {"Resources ": ResourceName.resource_name};
+							if(Query.count>0){
+								queryData();
+							}else{Utality.Embed(message,result,"No Permission","Permission Denied");}
+							
+						});
+					});
+				}
+				ownercheck(message.guildId,message.author.id);
 				releaseQuery();
 				Utality.Log(`All Connections ${con._allConnections.length}`);
 				Utality.Log(`Acquiring Connections ${con._acquiringConnections.length}`);
