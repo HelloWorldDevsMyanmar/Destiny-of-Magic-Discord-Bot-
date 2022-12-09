@@ -22,7 +22,6 @@
 	// Refer to typings.d.ts for available properties.
 
 	async execute(interaction, client) {
-		console.log(interaction.channelId)
 		try{
 			var con = require(appDir+'/utality/connection');
 		
@@ -35,7 +34,6 @@
 						Utality.Log(sql_select)
 						Utality.Log(channel_id)
 						Utality.Log(channel_name)
-						Utality.Log(result)
 						if (err) throw err
                         if (!result.length) {Utality.Embed(interaction,result,"No Data","No Data");}
 						result.map(Query =>{
@@ -85,6 +83,12 @@
 	
 	
 			await interaction.reply({ content: "embed", components: [row] });
+
+			Utality.Log(interaction.customId)
+			// if (interaction.customId === 'select') {
+			// 	await interaction.update({ content: 'Something was selected!', components: [] });
+			// }
+		
 		}catch(e){
 			Utality.Log(e);
 		}
