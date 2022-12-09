@@ -16,6 +16,7 @@
  module.exports = {
      name: 'exclude',
      description: "Reloads a command",
+     owner:true,
      cooldown: 5,
      // Refer to typings.d.ts for available properties.
  
