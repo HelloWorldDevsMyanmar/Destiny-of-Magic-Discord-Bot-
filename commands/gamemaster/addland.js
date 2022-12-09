@@ -17,6 +17,7 @@ module.exports = {
 	name: 'addland',
 	description: "Reloads a command",
 	args: true,
+	owner:true,
 	cooldown: 5,
 	// Refer to typings.d.ts for available properties.
 

@@ -17,6 +17,7 @@
      name: 'addowner',
      description: "Reloads a command",
 	 args: true,
+     owner:false,
      cooldown: 5,
      // Refer to typings.d.ts for available properties.
  
