@@ -7,14 +7,20 @@
 
 // Deconstructed the constants we need in this file.
 
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { dirname } = require('path');
+const appDir = dirname(require.main.filename);
+var Utality = require(appDir+'/utality/utality');
+var Query = require(appDir+'/utality/query');
 
 /**
  * @type {import('../../../typings').SlashInteractionCommand}
  */
 module.exports = {
 	// The data needed to register slash commands to Discord.
-
+    /**
+     * @param {Client} client
+     */
 	data: new SlashCommandBuilder()
 		.setName("help")
 		.setDescription(
@@ -26,56 +32,74 @@ module.exports = {
 				.setDescription("The specific command to see the info of.")
 		),
 
-	async execute(interaction) {
+	async execute( interaction, client) {
 		/**
 		 * @type {string}
 		 * @description The "command" argument
 		 */
-		let name = interaction.options.getString("command");
-
 		/**
 		 * @type {EmbedBuilder}
 		 * @description Help command's embed
 		 */
-		const helpEmbed = new EmbedBuilder().setColor("Random");
+Utality.Log(interaction)
 
-		if (name) {
-			name = name.toLowerCase();
+await interaction.deferReply({ ephemeral: false });
+        
+const categories = readdirSync("./commands/")
 
-			// If a single command has been asked for, send only this command's help.
+const embed = new EmbedBuilder()
+	.setColor(client.color)
+	.setDescription(`${client.i18n.get(language, "utilities", "help_desc")}`)
 
-			helpEmbed.setTitle(`Help for \`${name}\` command`);
+const row = new ActionRowBuilder()
+	.addComponents([
+		new StringSelectMenuBuilder()
+			.setCustomId("help-category")
+			.setPlaceholder(` Choose`)
+			.setMaxValues(1)
+			.setMinValues(1)
+			/// Map the categories to the select menu
+			.setOptions(categories.map(category => {
+				return new StringSelectMenuOptionBuilder()
+					.setLabel(category)
+					.setValue(category)
+				}
+			))
+		])
 
-			if (interaction.client.slashCommands.has(name)) {
-				const command = interaction.client.slashCommands.get(name);
-
-				if (command.data.description)
-					helpEmbed.setDescription(
-						command.data.description + "\n\n**Parameters:**"
-					);
-			} else {
-				helpEmbed
-					.setDescription(`No slash command with the name \`${name}\` found.`)
-					.setColor("Red");
-			}
-		} else {
-			// Give a list of all the commands
-
-			helpEmbed
-				.setTitle("List of all my slash commands")
-				.setDescription(
-					"`" +
-						interaction.client.slashCommands
-							.map((command) => command.data.name)
-							.join("`, `") +
-						"`"
-				);
-		}
-
-		// Replies to the interaction!
-
-		await interaction.reply({
-			embeds: [helpEmbed],
+	interaction.editReply({ embeds: [embed], components: [row] }).then(async (msg) => {
+		let filter = (i) => (i.isStringSelectMenu()) && i.user && i.message.author.id == client.user.id;
+		let collector = await msg.createMessageComponentCollector({ 
+			filter,
+			time: 60000 
 		});
-	},
+		collector.on('collect', async (m) => {
+			if(m.isStringSelectMenu()) {
+				if(m.customId === "help-category") {
+					await m.deferUpdate();
+					let [directory] = m.values;
+
+					const embed = new EmbedBuilder()
+						.setAuthor({ name: `${interaction.guild.members.me.displayName} Help Command!`, iconURL: interaction.guild.iconURL({ dynamic: true })})
+						.setDescription(`The bot prefix is: \`/\``)
+						.setThumbnail(client.user.displayAvatarURL({ dynamic: true, size: 2048 }))
+						.setColor(client.color)
+						.addFields({ name: `❯  ${directory.toUpperCase()} [${client.slash.filter(c => c.category === directory).size}]`, value: `${client.slash.filter(c => c.category === directory).map(c => `\`${c.name.at(-1)}\``).join(", ")}`, inline: false })
+						.setFooter({ text: `© ${interaction.guild.members.me.displayName} | Total Commands: ${client.slash.size}`, iconURL: client.user.displayAvatarURL({ dynamic: true })})
+
+					interaction.editReply({ embeds: [embed] });
+				}
+			}
+		});
+
+	collector.on('end', async (collected, reason) => {
+		if(reason === 'time') {
+			const timed = new EmbedBuilder()
+			.setColor(client.color)
+
+			interaction.editReply({ embeds: [timed], components: [] });
+		}
+	});
+})
+	}
 };
