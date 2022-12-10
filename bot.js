@@ -249,7 +249,7 @@ const commandJsonData = [
 		await rest.put(
 			/**
 			 * By default, you will be using guild commands during development.
-			 * Once you are done and ready to use global commands (which have 1 hour cache time),
+			 * Once you are done and  to use global commands (which have 1 hour cache time),
 			 * 1. Please uncomment the below (commented) line to deploy global commands.
 			 * 2. Please comment the below (uncommented) line (for guild commands).
 			 */
