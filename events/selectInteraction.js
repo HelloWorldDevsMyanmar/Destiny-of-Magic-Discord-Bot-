@@ -11,7 +11,7 @@ module.exports = {
 	/**
 	 * @description Executes when an interaction is created and handle it.
 	 * @author Naman Vrati
-	 * @param {import('discord.js').SelectMenuInteraction & { client: import('../typings').Client }} interaction The interaction which was created
+	 * @param {import('discord.js').StringSelectMenuInteraction & { client: import('../typings').Client }} interaction The interaction which was created
 	 */
 
 	async execute(interaction) {
@@ -20,8 +20,8 @@ module.exports = {
 
 		// Checks if the interaction is a select menu interaction (to prevent weird bugs)
 
-		if (!interaction.isSelectMenu()) return;
-
+		if (!interaction.isStringSelectMenu()) return;
+Utality.Log(interaction);
 		const command = client.selectCommands.get(interaction.customId);
 
 		// If the interaction is not a command in cache, return error message.
